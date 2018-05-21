@@ -20,7 +20,6 @@ import UIKit
 // https connection is, fear not! Everything will be explained in the
 // networking section.
 // At this point it's not relevant.
-
 enum BigImages: String {
     case whale = "https://lh3.googleusercontent.com/16zRJrj3ae3G4kCDO9CeTHj_dyhCvQsUDU0VF0nZqHPGueg9A9ykdXTc6ds0TkgoE1eaNW-SLKlVrwDDZPE=s0#w=4800&h=3567"
     case shark = "https://lh3.googleusercontent.com/BCoVLCGTcWErtKbD9Nx7vNKlQ0R3RDsBpOa8iA70mGW2XcC76jKS09pDX_Rad6rjyXQCxngEYi3Sy3uJgd99=s0#w=4713&h=3846"
@@ -34,6 +33,7 @@ class ViewController: UIViewController {
     // MARK: Outlets
     
     @IBOutlet weak var photoView: UIImageView!
+    @IBOutlet weak var activityView: UIActivityIndicatorView!
     
     // MARK: Actions
     
@@ -82,14 +82,35 @@ class ViewController: UIViewController {
     // This code downloads the huge image in a global queue and uses a completion
     // closure.
     @IBAction func asynchronousDownload(_ sender: UIBarButtonItem) {
+        // hide current image
+        photoView.image = nil
         
+        // start animation
+        activityView.startAnimating()
         
-        
-    
-    
-    
+        withBigImage { (image) -> Void in
+            self.photoView.image = image
+        }
+        // Stop animating
+        self.activityView.stopAnimating()
     }
     
+    // This code downloads the huge image in a global queue and uses a completion closure.
+    func withBigImage(completionHandler handler: @escaping (_ image: UIImage) -> Void){
+        
+        DispatchQueue.global(qos: .userInitiated).async { () -> Void in
+            
+            if let url = URL(string: BigImages.whale.rawValue),
+                let imgData = try? Data(contentsOf: url),
+                let img = UIImage(data: imgData) {
+                
+                // all set and done, run the completion closure!
+                DispatchQueue.main.async(execute: { () -> Void in
+                    handler(img)
+                })
+            }
+        }
+    }
     
     // Changes the alpha value (transparency of the image). It's only purpose is to show if the
     // UI is blocked or not.
