@@ -78,7 +78,6 @@ class ViewController: UIViewController {
         }
     }
     
-    
     // This code downloads the huge image in a global queue and uses a completion
     // closure.
     @IBAction func asynchronousDownload(_ sender: UIBarButtonItem) {

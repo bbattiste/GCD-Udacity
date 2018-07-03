@@ -64,7 +64,7 @@ Now let's create a typealias for a function that takes no parameters (Void) and 
 
 I'll call that an ```IntMaker```:
 */
-typealias IntMaker = (Void) -> Int
+typealias IntMaker = () -> Int
 
 /*:
 ## Variable capture, at last!
@@ -135,8 +135,8 @@ Think very carefully what the output should be:
 QUIZ
 */
 counter1()
-//counter1()
-//counter1()
+counter1()
+counter1()
 
 
 /*:
@@ -145,8 +145,8 @@ counter1()
 QUIZ
 Explain why you think it will return the value you expect
 */
-//counter2()
-
+counter2()
+counter2()
 /*:
 ### Safe capture
 
